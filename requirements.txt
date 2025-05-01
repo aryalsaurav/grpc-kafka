@@ -1,0 +1,9 @@
+Django>=4.2
+psycopg2-binary>=2.9
+celery>=5.3
+redis>=5.0
+gunicorn>=20.1
+django-cors-headers
+django-environ>=0.11.2
+uuid>=1.30
+pillow>=10.3.0

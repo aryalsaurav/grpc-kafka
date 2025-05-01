@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: always
+    depends_on:
+      - db
+      - redis
+      - celery
+    networks:
+      - django_network
+
+  db:
+    image: postgres:15
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - django_network
+
+  redis:
+    image: redis:7
+    networks:
+      - django_network
+
+  celery:
+    build: .
+    command: celery -A core.celery worker --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+    networks:
+      - django_network
+
+  celery-beat:
+    build: .
+    command: celery -A core.celery beat --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - celery
+      - redis
+      - db
+    networks:
+      - django_network
+
+networks:
+  django_network:
+
+volumes:
+  postgres_data:
