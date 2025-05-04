@@ -7,21 +7,21 @@ from django.conf import settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
 # Create a Celery instance
-app = Celery('core', broker='redis://localhost:6379/0')
+app = Celery('core')
 
 # Configure Celery
 app.config_from_object(settings, namespace='CELERY')
 
 
-# ##update settings 
+# ##update settings
 app.conf.update(
     task_serializer='json',
     result_backend='redis://localhost:6379/0',
     timezone='Asia/Kathmandu',
     enable_utc=True,
-    accept_content=['json'],  # Ignore other content    
+    accept_content=['json'],  # Ignore other content
     result_serializer='json',
-    
+
 )
 
 

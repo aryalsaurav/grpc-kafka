@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-65etd+^un1z3@l5ov*o5)&-woac@qj3+a9n4u13779d&8!)+^_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_grpc_framework",
+    "django_celery_beat",
+    "blog",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -106,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-REDIS_HOST = env('REDIS_HOST', default='localhost')
+REDIS_HOST = env('REDIS_HOST', default='redis')
 REDIS_PORT = env('REDIS_PORT', default=6379)
 REDIS_DB = env('REDIS_DB', default=0)
 
@@ -114,7 +118,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
-        
+
     }
 }
 
@@ -127,8 +131,8 @@ CHANNEL_LAYERS = {
     },
 }
 
-
-
+CELERY_BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+# CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -150,7 +154,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',  # Static files in a project-level directory
 ]
-    
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')

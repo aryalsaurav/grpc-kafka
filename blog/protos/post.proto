@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package post;
+
+
+message Post {
+    int64 id = 1;
+    string title = 2;
+    string content = 3;
+    int64 author = 4;
+    int64 category = 5;
+    string created_at = 6;
+}
+
+message GetPostRequest{
+    int64 id = 1;
+}
+
+message GetPostResponse{
+    Post post = 1;
+
+}
+
+message CreatePostRequest{
+    string title = 1;
+    string content = 2;
+    int64 author = 3;
+    int64 category = 4;
+}
+
+message CreatePostResponse{
+    Post post = 1;
+}
+
+
+service PostService{
+    rpc GetPost(GetPostRequest) returns (GetPostResponse);
+    rpc CreatePost(CreatePostRequest) returns (CreatePostResponse);
+}
+// python -m grpc_tools.protoc \
+//  -I myapp/protos \
+//  --python_out=myapp/grpc \
+//  --grpc_python_out=myapp/grpc \
+//  myapp/protos/post.proto
